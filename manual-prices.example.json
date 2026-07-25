@@ -1,0 +1,13 @@
+[
+  {
+    "provider": "example-provider",
+    "model": "example-model",
+    "source_url": "https://example.com/official-pricing",
+    "effective_at": "2026-01-01T00:00:00Z",
+    "rates": {
+      "input": 1.0,
+      "cache_read": 0.1,
+      "output": 2.0
+    }
+  }
+]

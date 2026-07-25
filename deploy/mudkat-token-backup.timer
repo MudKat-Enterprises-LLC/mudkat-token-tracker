@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily MudKat Token Tracker backup
+
+[Timer]
+OnCalendar=*-*-* 03:45:00
+Persistent=true
+RandomizedDelaySec=60
+Unit=mudkat-token-backup.service
+
+[Install]
+WantedBy=timers.target

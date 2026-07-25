@@ -1,0 +1,14 @@
+[Unit]
+Description=Refresh MudKat Token Tracker pricing
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/apps/mudkat-token-tracker
+EnvironmentFile=%h/.config/mudkat-token-tracker.env
+ExecStart=/usr/bin/python3 tracker.py --db %h/.local/share/mudkat-token-tracker/tracker.sqlite3 --manual-prices %h/.config/mudkat-token-prices.json refresh-pricing
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/mudkat-token-tracker

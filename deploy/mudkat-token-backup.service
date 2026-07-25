@@ -1,0 +1,12 @@
+[Unit]
+Description=Back up MudKat Token Tracker database
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/apps/mudkat-token-tracker
+ExecStart=/usr/bin/python3 tracker.py --db %h/.local/share/mudkat-token-tracker/tracker.sqlite3 backup --dir %h/.local/share/mudkat-token-tracker/backups --retention-days 30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/mudkat-token-tracker

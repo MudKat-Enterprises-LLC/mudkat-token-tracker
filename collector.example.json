@@ -1,0 +1,6 @@
+{
+  "server": "http://127.0.0.1:9130",
+  "sessions_path": "%USERPROFILE%\\.codex\\sessions",
+  "auth_path": "%USERPROFILE%\\.codex\\auth.json",
+  "state_path": "%USERPROFILE%\\.mudkat-token-tracker\\collector-state.json"
+}
