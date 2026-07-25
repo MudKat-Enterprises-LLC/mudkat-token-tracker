@@ -7,6 +7,7 @@ Type=oneshot
 WorkingDirectory=%h/apps/mudkat-token-tracker
 EnvironmentFile=%h/.config/mudkat-token-tracker.env
 ExecStart=/usr/bin/python3 tracker.py --db %h/.local/share/mudkat-token-tracker/tracker.sqlite3 --manual-prices %h/.config/mudkat-token-prices.json refresh-pricing
+UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict

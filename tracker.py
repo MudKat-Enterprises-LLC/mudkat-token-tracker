@@ -13,11 +13,9 @@ import math
 import os
 import platform
 import re
-import shutil
 import sqlite3
 import threading
 import time
-import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone, tzinfo
 from decimal import Decimal, InvalidOperation
@@ -138,10 +136,8 @@ SOURCE_URLS = {
 def connect(db_path: str | Path) -> sqlite3.Connection:
     path = Path(db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    created = not path.exists()
     db = sqlite3.connect(str(path), timeout=30, check_same_thread=False)
-    if created:
-        path.chmod(0o600)
+    path.chmod(0o600)
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA busy_timeout=30000")
     db.executescript(SCHEMA)
@@ -181,6 +177,8 @@ def clean_count(value, name: str) -> int:
         return 0
     if isinstance(value, bool):
         raise ValueError(f"{name} must be an integer")
+    if isinstance(value, float) and (not math.isfinite(value) or not value.is_integer()):
+        raise ValueError(f"{name} must be an integer")
     number = int(value)
     if number < 0 or number > 10**15:
         raise ValueError(f"{name} is outside the accepted range")
@@ -219,6 +217,8 @@ def normalize_event(raw: dict) -> dict:
     )
     if not event["total_tokens"]:
         event["total_tokens"] = calculated_total
+    elif event["total_tokens"] < calculated_total:
+        raise ValueError("total_tokens cannot be less than the token category total")
     for field in ("actual_cost_usd", "estimated_cost_usd"):
         value = raw.get(field)
         if value is not None:
@@ -932,7 +932,6 @@ class App:
                     db.execute("DELETE FROM request_replays WHERE seen_at<?", (now_ts() - 600,))
                     try:
                         db.execute("INSERT INTO request_replays VALUES(?,?)", (signature, now_ts()))
-                        db.commit()
                     except sqlite3.IntegrityError:
                         return self.reply(409, {"error": "replay", "acknowledged": True})
                     payload = json.loads(body)
@@ -980,6 +979,10 @@ class App:
 
 
 def backup(db_path: str, backup_dir: str, retention_days: int = 30) -> str:
+    if retention_days < 1:
+        raise ValueError("retention_days must be at least 1")
+    if not Path(db_path).is_file():
+        raise FileNotFoundError(db_path)
     target_dir = Path(backup_dir)
     target_dir.mkdir(parents=True, exist_ok=True)
     target = target_dir / f"tracker-{datetime.now(TZ):%Y%m%d-%H%M%S}.sqlite3"

@@ -9,6 +9,7 @@ EnvironmentFile=%h/.config/mudkat-token-tracker.env
 ExecStart=/usr/bin/python3 tracker.py --db %h/.local/share/mudkat-token-tracker/tracker.sqlite3 serve --host 127.0.0.1 --port 9130
 Restart=on-failure
 RestartSec=5
+UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict

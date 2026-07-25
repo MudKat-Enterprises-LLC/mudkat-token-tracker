@@ -1,6 +1,6 @@
 # Security Review
 
-Review date: 2026-07-24
+Review date: 2026-07-25
 
 ## Scope
 
@@ -22,9 +22,13 @@ The intended security boundary is one trusted machine or private network. Public
 - Added finite, timezone-aware, bounded timestamp validation.
 - Added safe handling for invalid decimal cost values.
 - Added persistent replay protection and retained constant-time signature comparison.
+- Delayed replay acknowledgement until signed payloads have been validated and committed.
+- Rejected fractional, non-finite, and internally inconsistent token counts.
+- Rejected destructive backup-retention values and missing source databases.
 - Added CSP, clickjacking, referrer, MIME-sniffing, and browser-permission headers.
 - Escaped a model-derived dashboard field before inserting it into HTML.
 - Restricted newly created database, backup, and collector-state files to owner access where supported.
+- Reapplied owner-only database permissions on startup and set a restrictive systemd umask.
 - Rejected pricing-source redirects outside HTTPS.
 - Added generic systemd paths and loopback-only service defaults.
 
@@ -65,8 +69,10 @@ The single-file dashboard requires inline CSS and JavaScript, so the CSP permits
 
 - Python compilation completed successfully.
 - Dashboard JavaScript parsed successfully.
+- The automated suite completed with 16 tests; the only local skip was the expected optional Windows IANA time-zone database check.
+- GitHub Actions has read-only repository permissions and uses full commit SHAs for every action.
 - The automated suite covers ingestion authentication, replay, skew, payload limits, content rejection, collector recovery, database WAL and backup behavior, pricing preservation, time boundaries, and security headers.
-- Repository scans found no private machine identifiers, credentials, runtime databases, collector state, or local configuration.
+- Current-tree and full-history scans found no private machine identifiers, credentials, runtime databases, collector state, or local configuration.
 
 ## Assessment
 
