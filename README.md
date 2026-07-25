@@ -68,6 +68,49 @@ python3 tracker.py serve --host 0.0.0.0 --port 9130
 
 Do not expose the built-in HTTP server directly to the public internet. Use a VPN or an authenticated TLS reverse proxy if remote access is required.
 
+## Install with an AI Agent
+
+If your coding agent can access a terminal and GitHub, give it this repository URL and the instruction below:
+
+```text
+Install MudKat Token Tracker from:
+https://github.com/MudKat/mudkat-token-tracker
+
+Follow the repository README and SECURITY.md. First inspect the machine and
+explain the deployment plan. Then:
+
+1. Run the repository tests before installation.
+2. Install the central tracker on Linux as a user service using the supplied
+   systemd units. Do not overwrite an existing installation or configuration.
+3. Generate the HMAC secret locally, store it outside the repository with
+   owner-only permissions, and never print it in chat, logs, commits, or issue
+   reports.
+4. Keep the tracker bound to 127.0.0.1 unless I explicitly approve LAN access.
+   Ask before changing firewall rules, adding a reverse proxy, using sudo, or
+   exposing any network port.
+5. Detect supported clients already present on my machines and install only
+   their metadata collectors: Codex Desktop, Hermes, OpenCode, or the generic
+   sender. Open Hermes databases read-only.
+6. Do not read, copy, store, or transmit prompts, responses, tool output,
+   OAuth tokens, provider API keys, or unrelated agent configuration. Do not
+   reroute model traffic or modify provider settings.
+7. Verify the service, timers, /healthz response, collector heartbeat, and one
+   synthetic or newly completed usage event. Report every file, service, task,
+   firewall rule, and endpoint changed.
+
+Stop and ask me before any destructive action or security-boundary change.
+```
+
+For a shorter request, tell the agent:
+
+```text
+Install https://github.com/MudKat/mudkat-token-tracker by following its
+"Install with an AI Agent" instructions. Keep the deployment private and do
+not modify model-provider credentials or traffic routing.
+```
+
+The agent still needs terminal access to the target machines and permission to create the documented service, configuration, and collector files. Repository access alone does not grant machine access.
+
 ## Configuration
 
 Copy `.env.example` outside the repository and restrict it to the service account:
