@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS meta (
 );
 """
 SOURCE_URLS = {
-    "openai": ("https://openai.com/api/pricing/", "official_page"),
+    "openai": ("https://developers.openai.com/api/docs/pricing", "official_page"),
     "anthropic": ("https://docs.anthropic.com/en/docs/about-claude/pricing", "official_page"),
     "google": ("https://ai.google.dev/gemini-api/docs/pricing", "official_page"),
     "xai": ("https://docs.x.ai/docs/models", "official_page"),
