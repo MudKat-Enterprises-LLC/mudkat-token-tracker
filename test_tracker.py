@@ -168,6 +168,12 @@ class HermesImporterTests(TempCase):
 
 
 class AggregationPricingTests(TempCase):
+    def test_openai_pricing_source_uses_official_developer_docs(self):
+        self.assertEqual(
+            ("https://developers.openai.com/api/docs/pricing", "official_page"),
+            tracker.SOURCE_URLS["openai"],
+        )
+
     def test_boundaries_dst_monday_month_year_and_lifetime(self):
         with self.assertRaises(ValueError):
             tracker.parse_time(float("nan"))
