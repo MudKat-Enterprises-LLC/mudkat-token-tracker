@@ -74,7 +74,7 @@ If your coding agent can access a terminal and GitHub, give it this repository U
 
 ```text
 Install MudKat Token Tracker from:
-https://github.com/MudKat/mudkat-token-tracker
+https://github.com/MudKat-Enterprises-LLC/mudkat-token-tracker
 
 Follow the repository README and SECURITY.md. First inspect the machine and
 explain the deployment plan. Then:
@@ -104,7 +104,7 @@ Stop and ask me before any destructive action or security-boundary change.
 For a shorter request, tell the agent:
 
 ```text
-Install https://github.com/MudKat/mudkat-token-tracker by following its
+Install https://github.com/MudKat-Enterprises-LLC/mudkat-token-tracker by following its
 "Install with an AI Agent" instructions. Keep the deployment private and do
 not modify model-provider credentials or traffic routing.
 ```
