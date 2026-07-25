@@ -379,7 +379,11 @@ class SecurityDatabaseTests(TempCase):
 
     def test_batch_limits_wal_backup_restore(self):
         self.assertEqual(400, self.send({"events": [sample_event(str(i)) for i in range(1001)]})[0])
-        oversized = urllib.request.Request(self.url, data=b"x" * (tracker.MAX_BATCH_BYTES + 1))
+        oversized = urllib.request.Request(
+            self.url,
+            data=b"x",
+            headers={"Content-Length": str(tracker.MAX_BATCH_BYTES + 1)},
+        )
         with self.assertRaises(urllib.error.HTTPError) as caught:
             urllib.request.urlopen(oversized)
         self.assertEqual(413, caught.exception.code)
