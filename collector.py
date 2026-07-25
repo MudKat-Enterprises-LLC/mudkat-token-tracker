@@ -14,7 +14,6 @@ import subprocess
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime
 from pathlib import Path
 
 SAFE_TYPE = re.compile(rb'"type"\s*:\s*"(session_meta|turn_context|event_msg)"')

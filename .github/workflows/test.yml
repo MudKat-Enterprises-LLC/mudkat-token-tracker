@@ -22,3 +22,4 @@ jobs:
       - run: python -m unittest -v
       - run: node --check opencode-plugin.js
       - run: node -e "const fs=require('fs');const h=fs.readFileSync('dashboard.html','utf8');new Function(h.match(/<script>([\s\S]*?)<\/script>/)[1])"
+      - run: systemd-analyze --user verify deploy/*.service deploy/*.timer

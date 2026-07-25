@@ -211,6 +211,13 @@ class AggregationPricingTests(TempCase):
             self.db, {"range": ["today"], "timezone": [str(tracker.TZ)]})
         self.assertEqual(["new"], [row["session_id"] for row in rows])
 
+    def test_token_counts_are_integral_and_total_is_consistent(self):
+        for value in (1.5, float("nan"), float("inf")):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                tracker.normalize_event(sample_event(input_tokens=value))
+        with self.assertRaises(ValueError):
+            tracker.normalize_event(sample_event(total_tokens=1))
+
     def test_price_update_override_and_historical_preservation(self):
         when = time.time()
         tracker.set_price(self.db, "openai", "gpt-test", "input", "2", "official", "a", when, "v1")
@@ -304,6 +311,7 @@ class SecurityDatabaseTests(TempCase):
         self.assertEqual(409, self.send(payload)[0])
         self.assertEqual(401, self.send(payload, timestamp=int(time.time()) - 301)[0])
         self.assertEqual(400, self.send({"events": ["bad"]})[0])
+        self.assertEqual(400, self.send({"events": ["bad"]})[0])
         columns = {r[1] for r in self.db.execute("PRAGMA table_info(events)")}
         self.assertFalse({"secret_prompt", "response"} & columns)
         body = b"{}"
@@ -380,6 +388,10 @@ class SecurityDatabaseTests(TempCase):
         self.db.close()
         self.db = tracker.connect(self.db_path)
         self.assertEqual(1, self.db.execute("SELECT COUNT(*) FROM events").fetchone()[0])
+        with self.assertRaises(ValueError):
+            tracker.backup(str(self.db_path), str(self.root / "backups"), 0)
+        with self.assertRaises(FileNotFoundError):
+            tracker.backup(str(self.root / "missing.sqlite3"), str(self.root / "backups"))
         target = tracker.backup(str(self.db_path), str(self.root / "backups"))
         restored = sqlite3.connect(target)
         self.assertEqual(1, restored.execute("SELECT COUNT(*) FROM events").fetchone()[0])

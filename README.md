@@ -206,6 +206,13 @@ The systemd units use `%h` and contain no machine-specific usernames or paths. I
 
 Then copy the units to `~/.config/systemd/user/`, reload systemd, and enable the tracker, pricing, and backup timers.
 
+```bash
+install -d -m 700 ~/.config/systemd/user ~/.local/share/mudkat-token-tracker/backups
+cp deploy/*.service deploy/*.timer ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now mudkat-token-tracker.service mudkat-token-pricing.timer mudkat-token-backup.timer
+```
+
 The supplied service binds to loopback by default. Review the network guidance above before changing it.
 
 ## Security
